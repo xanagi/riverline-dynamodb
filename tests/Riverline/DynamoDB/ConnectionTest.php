@@ -289,6 +289,28 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testConnection
      */
+    public function testUpdateSyntax(Connection $conn)
+    {
+        $item = new Item(DY_TABLE);
+        $item['id']      = ITEM_ID;
+        $item['name']    = 'test';
+        $item['strings'] = array('test1', 'test2');
+        $item['numbers'] = array(4, 5, 6);
+
+        $conn->put($item);
+
+        $update = new \Riverline\DynamoDB\AttributeUpdate();
+        $update->setPutAction('name', 'newer name');
+        $update->setAddAction('strings', array('test4'));
+        $update->setDeleteAction('numbers');
+
+        $attributes = $conn->update(DY_TABLE, ITEM_ID, null, $update);
+        $this->assertNull($attributes);
+    }
+
+    /**
+     * @depends testConnection
+     */
     public function testPutExpected(Connection $conn)
     {
         $item = new Item(DY_TABLE);

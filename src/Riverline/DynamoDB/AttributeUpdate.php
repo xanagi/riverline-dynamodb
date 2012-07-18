@@ -74,4 +74,36 @@ class AttributeUpdate implements \ArrayAccess, \IteratorAggregate
     {
         return new \ArrayIterator($this->actions);
     }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param string|null $type
+     */
+    public function setPutAction($name, $value, $type = null)
+    {
+        $action = new UpdateAction(\AmazonDynamoDB::ACTION_PUT, $value, $type);
+        $this->actions[$name] = $action;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setDeleteAction($name)
+    {
+        $action = new UpdateAction(\AmazonDynamoDB::ACTION_DELETE);
+        $this->actions[$name] = $action;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param string|null $type
+     */
+    public function setAddAction($name, $value, $type = null)
+    {
+        $action = new UpdateAction(\AmazonDynamoDB::ACTION_ADD, $value, $type);
+        $this->actions[$name] = $action;
+    }
+
 }
